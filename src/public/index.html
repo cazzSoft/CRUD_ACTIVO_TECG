@@ -283,6 +283,7 @@
 
           <div class="actions">
             <button class="primary" type="submit">Guardar</button>
+            <button class="secondary" id="sampleButton" type="button">Ejemplo</button>
             <button class="secondary" id="clearButton" type="button">Limpiar</button>
           </div>
         </form>
@@ -326,6 +327,7 @@
       const statusMessage = document.querySelector("#statusMessage");
       const refreshButton = document.querySelector("#refreshButton");
       const clearButton = document.querySelector("#clearButton");
+      const sampleButton = document.querySelector("#sampleButton");
 
       const fields = ["name", "category", "serialNumber", "status", "location", "purchaseDate"];
 
@@ -345,6 +347,24 @@
         document.querySelector("#category").value = "laptop";
         document.querySelector("#status").value = "available";
         showMessage("");
+      }
+
+      function fillSampleAsset() {
+        const sample = {
+          name: "Laptop Dell Latitude 5420",
+          category: "laptop",
+          serialNumber: `DELL-LAT-${Date.now().toString().slice(-6)}`,
+          status: "available",
+          location: "Departamento de Sistemas",
+          purchaseDate: new Date().toISOString().slice(0, 10)
+        };
+
+        assetId.value = "";
+        fields.forEach((field) => {
+          document.querySelector(`#${field}`).value = sample[field];
+        });
+        formTitle.textContent = "Crear activo";
+        showMessage("Datos de ejemplo cargados. Revisa y guarda el activo.");
       }
 
       async function requestJson(url, options = {}) {
@@ -450,6 +470,7 @@
       assetsBody.addEventListener("click", handleTableClick);
       refreshButton.addEventListener("click", loadAssets);
       clearButton.addEventListener("click", resetForm);
+      sampleButton.addEventListener("click", fillSampleAsset);
       loadAssets();
     </script>
   </body>
