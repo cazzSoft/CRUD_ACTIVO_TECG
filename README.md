@@ -4,6 +4,12 @@ API REST desarrollada con Node.js y SQLite para gestionar un inventario de activ
 
 Este proyecto aplica principios basicos de SSDLC durante la fase de implementacion: validacion estricta de entradas, uso de UUID, consultas parametrizadas, logging seguro, limite de tamano de peticiones, validacion de tipo MIME y manejo controlado de errores.
 
+Repositorio publico:
+
+```txt
+https://github.com/cazzSoft/CRUD_ACTIVO_TECG
+```
+
 ## Objetivos de la actividad
 
 - Aplicar principios de SSDLC en la fase de implementacion.
@@ -229,3 +235,4 @@ Ejemplo de informacion registrada:
 - El limite de `10kb` reduce el riesgo de abuso por cuerpos de peticion demasiado grandes.
 - El middleware de tipo MIME rechaza `POST` y `PUT` que no usen `application/json`.
 - Los mensajes de error son controlados para no revelar detalles internos del servidor.
+- El documento de evidencia y los logs de ejecucion no se versionan en el repositorio.
