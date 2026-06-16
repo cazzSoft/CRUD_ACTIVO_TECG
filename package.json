@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node --no-warnings src/server.js",
-    "dev": "node --watch --no-warnings src/server.js"
+    "dev": "node --watch --no-warnings src/server.js",
+    "check": "node --check src/server.js && node --check src/controllers/assets.controller.js && node --check src/validators/asset.validator.js"
   },
   "keywords": [
     "crud",
@@ -15,8 +16,16 @@
     "ssdlc",
     "security"
   ],
-  "author": "",
+  "author": "cazzSoft",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cazzSoft/CRUD_ACTIVO_TECG.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cazzSoft/CRUD_ACTIVO_TECG/issues"
+  },
+  "homepage": "https://github.com/cazzSoft/CRUD_ACTIVO_TECG#readme",
   "dependencies": {},
   "devDependencies": {},
   "engines": {
