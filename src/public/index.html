@@ -457,11 +457,17 @@
 
         if (deleteId && confirm("Deseas eliminar este activo?")) {
           try {
-            await fetch(`/api/assets/${deleteId}`, { method: "DELETE" });
+            const response = await fetch(`/api/assets/${deleteId}`, { method: "DELETE" });
+
+            if (!response.ok) {
+              const body = await response.json();
+              throw new Error(body?.error || "No se pudo eliminar el activo.");
+            }
+
             showMessage("Activo eliminado correctamente.", "ok");
             await loadAssets();
           } catch (error) {
-            showMessage("No se pudo eliminar el activo.", "error");
+            showMessage(error.message, "error");
           }
         }
       }
