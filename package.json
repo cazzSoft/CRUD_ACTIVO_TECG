@@ -1,0 +1,25 @@
+{
+  "name": "crud-activos-seguros",
+  "version": "1.0.0",
+  "description": "CRUD REST seguro para inventario de activos tecnologicos usando Node.js, SQLite y UUID.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node --no-warnings src/server.js",
+    "dev": "node --watch --no-warnings src/server.js"
+  },
+  "keywords": [
+    "crud",
+    "nodejs",
+    "sqlite",
+    "uuid",
+    "ssdlc",
+    "security"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=22.5"
+  }
+}

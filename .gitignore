@@ -1,0 +1,9 @@
+node_modules/
+database.sqlite
+database.sqlite-*
+logs/*.log
+.env
+*.doc
+*.docx
+rendered_report/
+tools/

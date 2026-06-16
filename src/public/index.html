@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CRUD Seguro de Activos</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f8fb;
+        --panel: #ffffff;
+        --ink: #1f2937;
+        --muted: #64748b;
+        --line: #d8dee8;
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --danger: #b91c1c;
+        --danger-bg: #fee2e2;
+        --ok: #166534;
+        --ok-bg: #dcfce7;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+      }
+
+      header {
+        background: #111827;
+        color: #fff;
+        padding: 22px 32px;
+      }
+
+      header h1 {
+        margin: 0 0 4px;
+        font-size: 24px;
+        letter-spacing: 0;
+      }
+
+      header p {
+        margin: 0;
+        color: #cbd5e1;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: minmax(300px, 420px) minmax(0, 1fr);
+        gap: 20px;
+        padding: 24px 32px;
+      }
+
+      section {
+        min-width: 0;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 18px;
+        box-shadow: 0 1px 2px rgb(15 23 42 / 8%);
+      }
+
+      h2 {
+        margin: 0 0 14px;
+        font-size: 18px;
+      }
+
+      form {
+        display: grid;
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        color: #334155;
+        font-weight: 700;
+      }
+
+      input,
+      select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 10px 11px;
+        color: var(--ink);
+        font: inherit;
+        background: #fff;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: var(--primary);
+        outline: 2px solid rgb(37 99 235 / 18%);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 4px;
+      }
+
+      button {
+        border: 0;
+        border-radius: 6px;
+        padding: 10px 14px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .primary {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .secondary {
+        background: #e5e7eb;
+        color: #111827;
+      }
+
+      .danger {
+        background: var(--danger-bg);
+        color: var(--danger);
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .status {
+        min-height: 22px;
+        margin-top: 14px;
+        color: var(--muted);
+      }
+
+      .status.ok {
+        color: var(--ok);
+      }
+
+      .status.error {
+        color: var(--danger);
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 860px;
+        background: #fff;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 10px;
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      th {
+        background: #eef2f7;
+        color: #334155;
+        font-size: 13px;
+      }
+
+      td {
+        color: #1f2937;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .uuid {
+        max-width: 190px;
+        color: var(--muted);
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+
+      .row-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .empty {
+        padding: 28px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        header,
+        main {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+
+        main {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>CRUD Seguro de Activos</h1>
+      <p>Interfaz de prueba para la API REST con UUID, validacion y logging seguro.</p>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2 id="formTitle">Crear activo</h2>
+        <form id="assetForm">
+          <input id="assetId" type="hidden" />
+
+          <label>
+            Nombre
+            <input id="name" name="name" minlength="3" maxlength="100" required />
+          </label>
+
+          <label>
+            Categoria
+            <select id="category" name="category" required>
+              <option value="laptop">Laptop</option>
+              <option value="desktop">Desktop</option>
+              <option value="monitor">Monitor</option>
+              <option value="printer">Printer</option>
+              <option value="router">Router</option>
+              <option value="projector">Projector</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+
+          <label>
+            Numero de serie
+            <input id="serialNumber" name="serialNumber" minlength="5" maxlength="50" required />
+          </label>
+
+          <label>
+            Estado
+            <select id="status" name="status" required>
+              <option value="available">Available</option>
+              <option value="assigned">Assigned</option>
+              <option value="maintenance">Maintenance</option>
+              <option value="retired">Retired</option>
+            </select>
+          </label>
+
+          <label>
+            Ubicacion
+            <input id="location" name="location" minlength="3" maxlength="80" required />
+          </label>
+
+          <label>
+            Fecha de compra
+            <input id="purchaseDate" name="purchaseDate" type="date" required />
+          </label>
+
+          <div class="actions">
+            <button class="primary" type="submit">Guardar</button>
+            <button class="secondary" id="clearButton" type="button">Limpiar</button>
+          </div>
+        </form>
+        <div class="status" id="statusMessage"></div>
+      </section>
+
+      <section class="panel">
+        <div class="toolbar">
+          <h2>Activos registrados</h2>
+          <button class="secondary" id="refreshButton" type="button">Actualizar</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>UUID</th>
+                <th>Nombre</th>
+                <th>Categoria</th>
+                <th>Serie</th>
+                <th>Estado</th>
+                <th>Ubicacion</th>
+                <th>Compra</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="assetsBody">
+              <tr>
+                <td class="empty" colspan="8">Cargando activos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const form = document.querySelector("#assetForm");
+      const formTitle = document.querySelector("#formTitle");
+      const assetId = document.querySelector("#assetId");
+      const assetsBody = document.querySelector("#assetsBody");
+      const statusMessage = document.querySelector("#statusMessage");
+      const refreshButton = document.querySelector("#refreshButton");
+      const clearButton = document.querySelector("#clearButton");
+
+      const fields = ["name", "category", "serialNumber", "status", "location", "purchaseDate"];
+
+      function showMessage(message, type = "") {
+        statusMessage.textContent = message;
+        statusMessage.className = `status ${type}`;
+      }
+
+      function getPayload() {
+        return Object.fromEntries(fields.map((field) => [field, document.querySelector(`#${field}`).value]));
+      }
+
+      function resetForm() {
+        form.reset();
+        assetId.value = "";
+        formTitle.textContent = "Crear activo";
+        document.querySelector("#category").value = "laptop";
+        document.querySelector("#status").value = "available";
+        showMessage("");
+      }
+
+      async function requestJson(url, options = {}) {
+        const response = await fetch(url, options);
+        const text = await response.text();
+        const body = text ? JSON.parse(text) : null;
+
+        if (!response.ok) {
+          const details = body?.details?.map((item) => `${item.field}: ${item.message}`).join("; ");
+          throw new Error(details || body?.error || "Error en la peticion");
+        }
+
+        return body;
+      }
+
+      async function loadAssets() {
+        try {
+          const result = await requestJson("/api/assets");
+          const assets = result.data || [];
+
+          if (!assets.length) {
+            assetsBody.innerHTML = '<tr><td class="empty" colspan="8">No hay activos registrados.</td></tr>';
+            return;
+          }
+
+          assetsBody.innerHTML = assets
+            .map(
+              (asset) => `
+                <tr>
+                  <td class="uuid">${asset.id}</td>
+                  <td>${asset.name}</td>
+                  <td>${asset.category}</td>
+                  <td>${asset.serialNumber}</td>
+                  <td>${asset.status}</td>
+                  <td>${asset.location}</td>
+                  <td>${asset.purchaseDate}</td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="secondary" type="button" data-edit="${asset.id}">Editar</button>
+                      <button class="danger" type="button" data-delete="${asset.id}">Eliminar</button>
+                    </div>
+                  </td>
+                </tr>
+              `
+            )
+            .join("");
+        } catch (error) {
+          assetsBody.innerHTML = `<tr><td class="empty" colspan="8">${error.message}</td></tr>`;
+        }
+      }
+
+      async function saveAsset(event) {
+        event.preventDefault();
+        const id = assetId.value;
+        const url = id ? `/api/assets/${id}` : "/api/assets";
+        const method = id ? "PUT" : "POST";
+
+        try {
+          await requestJson(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(getPayload())
+          });
+          showMessage(id ? "Activo actualizado correctamente." : "Activo creado correctamente.", "ok");
+          resetForm();
+          await loadAssets();
+        } catch (error) {
+          showMessage(error.message, "error");
+        }
+      }
+
+      async function handleTableClick(event) {
+        const editId = event.target.dataset.edit;
+        const deleteId = event.target.dataset.delete;
+
+        if (editId) {
+          try {
+            const result = await requestJson(`/api/assets/${editId}`);
+            const asset = result.data;
+            assetId.value = asset.id;
+            fields.forEach((field) => {
+              document.querySelector(`#${field}`).value = asset[field];
+            });
+            formTitle.textContent = "Editar activo";
+            showMessage("Activo cargado para edicion.");
+          } catch (error) {
+            showMessage(error.message, "error");
+          }
+        }
+
+        if (deleteId && confirm("Deseas eliminar este activo?")) {
+          try {
+            await fetch(`/api/assets/${deleteId}`, { method: "DELETE" });
+            showMessage("Activo eliminado correctamente.", "ok");
+            await loadAssets();
+          } catch (error) {
+            showMessage("No se pudo eliminar el activo.", "error");
+          }
+        }
+      }
+
+      form.addEventListener("submit", saveAsset);
+      assetsBody.addEventListener("click", handleTableClick);
+      refreshButton.addEventListener("click", loadAssets);
+      clearButton.addEventListener("click", resetForm);
+      loadAssets();
+    </script>
+  </body>
+</html>
