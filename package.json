@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node --no-warnings src/server.js",
     "dev": "node --watch --no-warnings src/server.js",
-    "check": "node --check src/server.js && node --check src/controllers/assets.controller.js && node --check src/validators/asset.validator.js"
+    "check": "node --check src/server.js && node --check src/controllers/assets.controller.js && node --check src/validators/asset.validator.js",
+    "test:smoke": "node --no-warnings scripts/smoke-test.js"
   },
   "keywords": [
     "crud",
